@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -79,19 +80,31 @@ class _CustomDrawerState extends State<CustomDrawer>
           children: const [
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('First', style: TextStyle(fontSize: 20),),
+              child: Text(
+                'First',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Second',style: TextStyle(fontSize: 20),),
+              child: Text(
+                'Second',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Third', style: TextStyle(fontSize: 20),),
+              child: Text(
+                'Third',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Fours', style: TextStyle(fontSize: 20),),
+              child: Text(
+                'Fours',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ],
         ),
@@ -99,7 +112,8 @@ class _CustomDrawerState extends State<CustomDrawer>
       color: Colors.blue,
     );
     var myChild = Container(
-      color: Colors.yellow,
+      child: const Center(child: Text('Hello')),
+      color: Colors.white,
     );
     return GestureDetector(
       onHorizontalDragStart: _onDragStart,
@@ -113,11 +127,23 @@ class _CustomDrawerState extends State<CustomDrawer>
           double scale = 1 - (animationController.value * 0.3);
           return Stack(
             children: [
-              myDrawer,
+              Transform.translate(
+                offset: Offset(maxSlide * (animationController.value - 1), 0),
+                child: Transform(
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(-3.14 / 2 * (1 - animationController.value)),
+                    // ..translate(slide)
+                    // ..scale(scale),
+                    alignment: Alignment.centerLeft,
+                    child: myDrawer),
+              ),
               Transform(
                   transform: Matrix4.identity()
-                    ..translate(slide)
-                    ..scale(scale),
+                    // ..setEntry(3, 2, 0.001)
+                    // ..rotateY(-3.14 / 2 * animationController.value),
+                   ..translate(slide)
+                   ..scale(scale),
                   alignment: Alignment.centerLeft,
                   child: myChild)
             ],
